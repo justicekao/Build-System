@@ -1,0 +1,53 @@
+{
+  "id": "cell-2-low-oxygen",
+  "title": "Low Oxygen Environment",
+  "library": "cell",
+  "description": "Plenty of glucose, almost no oxygen. Respiration alone won't keep up — you need to be efficient about it.",
+  "narrative": {
+    "intro": "Same design problem, thinner air. Oxygen is scarce here, and your mitochondria stall without it — respiration is capped by whichever of glucose or oxygen runs out first. Don't waste channel budget on the wrong molecule.",
+    "outro": "Oxygen-limited respiration is exactly the kind of constraint real cells face at altitude or in dense tissue. You solved it by matching supply to what the reaction can actually use, not by adding more of everything."
+  },
+  "environment": {
+    "description": "Glucose-rich, oxygen-poor extracellular fluid.",
+    "quantities": { "glucose": 12, "oxygen": 2, "waste": 0 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 3 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 5 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 },
+    { "partType": "wasteChannel", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 12, "oxygen": 2, "waste": 0 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 1.5, "turns": 12, "description": "Keep cytoplasmic ATP at or above 1.5 for 12 straight ticks." },
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "biomass", "comparator": "gte", "value": 1, "description": "Accumulate at least 1 unit of biomass." }
+  ],
+  "failConditions": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "eq", "value": 0, "turns": 15, "description": "ATP flatlined at zero for 15 ticks — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 300
+}

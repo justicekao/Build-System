@@ -1,0 +1,45 @@
+{
+  "id": "city-3-network-effect",
+  "title": "Network Effect",
+  "library": "city",
+  "description": "Four outposts, a cargo target that has to hold, and no single hub allowed to carry the whole network.",
+  "narrative": {
+    "intro": "You've got budget for a real network this time: four new outposts. Get the depot's cargo up to target and hold it there — and don't let any one outpost become a single point of failure with more than 3 routes through it.",
+    "outro": "A distributed network with no outpost carrying more than three connections turned out to be more robust than a hub-and-spoke, and it moved plenty of cargo besides."
+  },
+  "availableParts": [
+    { "partType": "outpost", "limit": 4 },
+    { "partType": "builderRoute", "limit": 4 },
+    { "partType": "cargoRoute", "limit": 5 },
+    { "partType": "cargoExpressRoute", "limit": 2 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 60,
+        "y": 260,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 12, "cargo": 12, "fleet": 2 }
+      },
+      {
+        "id": "depot",
+        "partType": "outpost",
+        "x": 620,
+        "y": 260,
+        "label": "Depot",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "streak", "node": "depot", "quantity": "cargo", "comparator": "gte", "value": 6, "turns": 6, "description": "Hold the Depot's cargo at or above 6 for 6 straight ticks." },
+    { "kind": "graph", "check": "connected", "description": "Every outpost must be reachable." },
+    { "kind": "graph", "check": "maxDegree", "value": 3, "description": "No outpost may have more than 3 routes connected to it." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 300
+}

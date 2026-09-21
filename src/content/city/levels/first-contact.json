@@ -1,0 +1,44 @@
+{
+  "id": "city-1-first-contact",
+  "title": "First Contact",
+  "library": "city",
+  "description": "Home base has builders and cargo to spare. Get cargo flowing out to the frontier outpost, and keep the network a simple tree — no loops.",
+  "narrative": {
+    "intro": "Scouts found a viable outpost site two jumps out. Home base is stocked and ready. Route cargo out to the frontier outpost, and keep it simple: one path between any two points, no redundant loops burning route budget.",
+    "outro": "A tree network moved everything it needed to with the fewest possible routes. Every extra edge you don't build is a route you don't have to defend later."
+  },
+  "availableParts": [
+    { "partType": "outpost", "limit": 2 },
+    { "partType": "builderRoute", "limit": 4 },
+    { "partType": "cargoRoute", "limit": 4 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 80,
+        "y": 260,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 8, "cargo": 6, "fleet": 2 }
+      },
+      {
+        "id": "frontier",
+        "partType": "outpost",
+        "x": 520,
+        "y": 260,
+        "label": "Frontier Outpost",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "frontier", "quantity": "cargo", "comparator": "gte", "value": 5, "description": "Deliver at least 5 cargo to the Frontier Outpost." },
+    { "kind": "graph", "check": "connected", "description": "Every outpost must be reachable — one connected network." },
+    { "kind": "graph", "check": "acyclic", "description": "No loops: the network must stay a tree." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 200
+}

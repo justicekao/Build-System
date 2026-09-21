@@ -1,0 +1,55 @@
+{
+  "id": "cell-1-first-breath",
+  "title": "First Breath",
+  "library": "cell",
+  "description": "A plain, glucose- and oxygen-rich environment. Build a cell that can actually stay alive in it.",
+  "narrative": {
+    "intro": "You are given a bare cytoplasm and a generous environment: plenty of glucose, plenty of oxygen. Nothing here is trying to kill you. The only question is whether you can wire up a cell that keeps its ATP above zero and actually builds biomass, rather than just sitting there.",
+    "outro": "The cell holds a stable ATP surplus and is laying down biomass. It isn't evolving or adapting — you built a system that happens to balance, and it survives because the numbers balance, not because it 'wanted' to."
+  },
+  "environment": {
+    "description": "Open, nutrient-rich extracellular fluid.",
+    "quantities": { "glucose": 10, "oxygen": 10, "waste": 0 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 2 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 4 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 },
+    { "partType": "wasteChannel", "limit": 1 },
+    { "partType": "glucoseTransporter", "limit": 1 },
+    { "partType": "effluxPump", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 10, "oxygen": 10, "waste": 0 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 3, "turns": 10, "description": "Keep cytoplasmic ATP at or above 3 for 10 straight ticks." },
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "biomass", "comparator": "gte", "value": 2, "description": "Accumulate at least 2 units of biomass." }
+  ],
+  "failConditions": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "eq", "value": 0, "turns": 15, "description": "ATP flatlined at zero for 15 ticks — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 300
+}

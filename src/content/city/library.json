@@ -1,0 +1,85 @@
+{
+  "id": "city",
+  "name": "Outpost Network",
+  "quantities": [
+    { "id": "population", "name": "Builders", "unit": "k", "color": "#4ea8f5" },
+    { "id": "cargo", "name": "Cargo", "unit": "t", "color": "#f5b642" },
+    { "id": "fleet", "name": "Escort fleet", "unit": "hulls", "color": "#e05656" }
+  ],
+  "partTypes": [
+    {
+      "id": "outpost",
+      "name": "Outpost",
+      "category": "node",
+      "group": "friendly",
+      "color": "#4ea8f5",
+      "description": "A new outpost you found. Starts with nothing — connect routes to give it builders, cargo, or an escort fleet."
+    },
+    {
+      "id": "allyOutpost",
+      "name": "Allied outpost",
+      "category": "node",
+      "group": "ally",
+      "color": "#5fd66b",
+      "description": "Already held by an ally. You can't add or remove these, only connect routes to them."
+    },
+    {
+      "id": "enemyOutpost",
+      "name": "Hostile outpost",
+      "category": "node",
+      "group": "enemy",
+      "color": "#b0453f",
+      "description": "Hostile territory. You can't remove it — you can only route an escort fleet there and hold it."
+    },
+    {
+      "id": "builderRoute",
+      "name": "Builder route",
+      "category": "edge",
+      "group": "route",
+      "color": "#4ea8f5",
+      "description": "Moves 1 unit of builders per tick from source to target, while the source has any to send.",
+      "allowedQuantities": ["population"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "population", "amount": 1 }]
+    },
+    {
+      "id": "builderExpressRoute",
+      "name": "Builder express route",
+      "category": "edge",
+      "group": "route",
+      "color": "#2c7cc9",
+      "description": "A higher-throughput builder route: moves 3 units of builders per tick.",
+      "allowedQuantities": ["population"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "population", "amount": 3 }]
+    },
+    {
+      "id": "cargoRoute",
+      "name": "Cargo route",
+      "category": "edge",
+      "group": "route",
+      "color": "#f5b642",
+      "description": "Moves 1 unit of cargo per tick from source to target, while the source has any to send.",
+      "allowedQuantities": ["cargo"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "cargo", "amount": 1 }]
+    },
+    {
+      "id": "cargoExpressRoute",
+      "name": "Cargo express route",
+      "category": "edge",
+      "group": "route",
+      "color": "#c98a1f",
+      "description": "A higher-throughput cargo route: moves 3 units of cargo per tick.",
+      "allowedQuantities": ["cargo"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "cargo", "amount": 3 }]
+    },
+    {
+      "id": "fleetRoute",
+      "name": "Fleet route",
+      "category": "edge",
+      "group": "route",
+      "color": "#e05656",
+      "description": "Moves 1 escort fleet hull per tick from source to target, while the source has any to send.",
+      "allowedQuantities": ["fleet"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "fleet", "amount": 1 }]
+    }
+  ]
+}

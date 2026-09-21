@@ -1,0 +1,121 @@
+{
+  "id": "cell",
+  "name": "Biological Cell",
+  "quantities": [
+    { "id": "glucose", "name": "Glucose", "unit": "mM", "color": "#f5b642" },
+    { "id": "oxygen", "name": "Oxygen", "unit": "mM", "color": "#4ea8f5" },
+    { "id": "atp", "name": "ATP", "unit": "mM", "color": "#5fd66b" },
+    { "id": "waste", "name": "Waste", "unit": "mM", "color": "#b05fd6" },
+    { "id": "biomass", "name": "Biomass", "unit": "au", "color": "#e05656" }
+  ],
+  "partTypes": [
+    {
+      "id": "environment",
+      "name": "Extracellular space",
+      "category": "node",
+      "group": "environment",
+      "color": "#cfd8dc",
+      "description": "The world outside the cell. Its concentrations are fixed for the level — connect channels to it to exchange molecules."
+    },
+    {
+      "id": "cytoplasm",
+      "name": "Cytoplasm",
+      "category": "node",
+      "group": "compartment",
+      "color": "#dbe7d6",
+      "description": "The cell body. Everything else connects back to it."
+    },
+    {
+      "id": "mitochondrion",
+      "name": "Mitochondrion",
+      "category": "node",
+      "group": "organelle",
+      "color": "#e8985e",
+      "description": "Burns glucose and oxygen to make ATP, and produces waste doing it.",
+      "rules": [
+        { "kind": "formula", "quantity": "glucose", "expression": "-min(glucose, oxygen) * 0.4" },
+        { "kind": "formula", "quantity": "oxygen", "expression": "-min(glucose, oxygen) * 0.4" },
+        { "kind": "formula", "quantity": "atp", "expression": "min(glucose, oxygen) * 1.2" },
+        { "kind": "formula", "quantity": "waste", "expression": "min(glucose, oxygen) * 0.4" }
+      ]
+    },
+    {
+      "id": "ribosome",
+      "name": "Ribosome",
+      "category": "node",
+      "group": "organelle",
+      "color": "#8e6fd1",
+      "description": "Spends ATP to build biomass. This is what actually keeps the cell alive.",
+      "rules": [
+        { "kind": "sink", "quantity": "atp", "rate": 0.3 },
+        { "kind": "source", "quantity": "biomass", "rate": 0.15 }
+      ]
+    },
+    {
+      "id": "innerMembrane",
+      "name": "Organelle membrane",
+      "category": "edge",
+      "group": "connection",
+      "color": "#8a8a8a",
+      "description": "Connects an organelle to the cytoplasm so molecules can equilibrate between them.",
+      "allowedQuantities": ["glucose", "oxygen", "atp", "waste", "biomass"],
+      "rules": [
+        { "kind": "diffusion", "quantity": "glucose", "rate": 0.5 },
+        { "kind": "diffusion", "quantity": "oxygen", "rate": 0.5 },
+        { "kind": "diffusion", "quantity": "atp", "rate": 0.5 },
+        { "kind": "diffusion", "quantity": "waste", "rate": 0.5 },
+        { "kind": "diffusion", "quantity": "biomass", "rate": 0.5 }
+      ]
+    },
+    {
+      "id": "glucoseChannel",
+      "name": "Glucose channel",
+      "category": "edge",
+      "group": "membrane transport",
+      "color": "#f5b642",
+      "description": "A passive channel letting glucose diffuse down its concentration gradient.",
+      "allowedQuantities": ["glucose"],
+      "rules": [{ "kind": "diffusion", "quantity": "glucose", "rate": 0.15 }]
+    },
+    {
+      "id": "oxygenChannel",
+      "name": "Oxygen channel",
+      "category": "edge",
+      "group": "membrane transport",
+      "color": "#4ea8f5",
+      "description": "A passive channel letting oxygen diffuse down its concentration gradient.",
+      "allowedQuantities": ["oxygen"],
+      "rules": [{ "kind": "diffusion", "quantity": "oxygen", "rate": 0.2 }]
+    },
+    {
+      "id": "wasteChannel",
+      "name": "Waste channel",
+      "category": "edge",
+      "group": "membrane transport",
+      "color": "#b05fd6",
+      "description": "A passive channel letting waste diffuse down its concentration gradient.",
+      "allowedQuantities": ["waste"],
+      "rules": [{ "kind": "diffusion", "quantity": "waste", "rate": 0.25 }]
+    },
+    {
+      "id": "glucoseTransporter",
+      "name": "Glucose transporter (active)",
+      "category": "edge",
+      "group": "membrane transport",
+      "color": "#c98a1f",
+      "description": "Vesicle-mediated active transport: pulls a fixed amount of glucose in per tick, even against the gradient, as long as the environment has any left.",
+      "allowedQuantities": ["glucose"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "glucose", "amount": 0.5 }]
+    },
+    {
+      "id": "effluxPump",
+      "name": "Efflux pump (active)",
+      "category": "edge",
+      "group": "membrane transport",
+      "color": "#6f3fa0",
+      "description": "Actively pumps waste out of the cell at a fixed rate, even into a toxic, waste-saturated environment.",
+      "allowedQuantities": ["waste"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "waste", "amount": 0.4 }]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "city-2-contested-frontier",
+  "title": "Contested Frontier",
+  "library": "city",
+  "description": "A hostile outpost sits between you and open territory. Hold it with a sustained escort fleet while growing a relay outpost's population — and keep the layout planar.",
+  "narrative": {
+    "intro": "The hostile outpost can't be removed, only pacified: route enough escort fleet there and keep it there. Meanwhile the relay outpost needs to actually grow, not just receive a one-time delivery. And route your cabling carefully — crossing lines in this sector jam each other's signal, so keep the layout crossing-free.",
+    "outro": "Sustained presence, not a single delivery, is what pacified that outpost — and a clean, non-crossing layout kept every line interference-free the whole time."
+  },
+  "availableParts": [
+    { "partType": "outpost", "limit": 1 },
+    { "partType": "builderRoute", "limit": 3 },
+    { "partType": "builderExpressRoute", "limit": 1 },
+    { "partType": "fleetRoute", "limit": 2 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 60,
+        "y": 300,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 10, "cargo": 4, "fleet": 6 }
+      },
+      {
+        "id": "relay",
+        "partType": "outpost",
+        "x": 340,
+        "y": 140,
+        "label": "Relay Outpost",
+        "quantities": { "population": 2, "cargo": 0, "fleet": 0 }
+      },
+      {
+        "id": "hostile",
+        "partType": "enemyOutpost",
+        "x": 620,
+        "y": 300,
+        "locked": true,
+        "label": "Hostile Outpost",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "streak", "node": "hostile", "quantity": "fleet", "comparator": "gte", "value": 4, "turns": 8, "description": "Hold at least 4 escort fleet hulls at the Hostile Outpost for 8 straight ticks." },
+    { "kind": "streak", "node": "relay", "quantity": "population", "comparator": "eq", "value": 2, "turns": 3, "delta": true, "description": "Grow the Relay Outpost's population by exactly 2 per tick for 3 ticks in a row." },
+    { "kind": "graph", "check": "noCrossingEdges", "description": "No two routes may cross." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 250
+}

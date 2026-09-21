@@ -1,0 +1,53 @@
+{
+  "id": "cell-3-toxic-efflux",
+  "title": "Toxic Efflux",
+  "library": "cell",
+  "description": "The environment outside is already saturated with waste. A passive waste channel will let it flood in, not out — you need an active pump.",
+  "narrative": {
+    "intro": "This patch of tissue is already toxic: waste concentration outside is higher than anything your cell will produce internally. A plain diffusion channel here works against you — waste flows downhill, and downhill is into the cell. You need something that moves waste out regardless of the gradient.",
+    "outro": "Real cells solve this with ATP-powered efflux pumps — the same family of transporters behind multidrug resistance in cancer cells and antibiotic resistance in bacteria. Moving something against its gradient always costs energy; that trade-off just showed up in your ATP budget."
+  },
+  "environment": {
+    "description": "Nutrient-adequate but waste-saturated extracellular fluid.",
+    "quantities": { "glucose": 9, "oxygen": 8, "waste": 14 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 2 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 4 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 },
+    { "partType": "effluxPump", "limit": 2 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 9, "oxygen": 8, "waste": 14 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "lte", "value": 6, "description": "Keep internal waste at or below 6." },
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 2, "turns": 10, "description": "Keep cytoplasmic ATP at or above 2 for 10 straight ticks." }
+  ],
+  "failConditions": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "gte", "value": 16, "description": "Internal waste hit toxic levels — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 300
+}
