@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Builder — model anything, watch it live or die</title>
+  <meta name="description" content="A sandbox where you wire up any system — a cell, a supply network, anything — out of parts and rules, then watch whether it actually survives its own physics." />
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <span class="brand">System Builder</span>
+      <nav class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#get-it">Get it</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Build the system. Don't script the outcome.</h1>
+        <p class="hero-sub">
+          Wire up organelles, membranes, and outposts out of the same small set of parts —
+          quantities, flows, rules — and let the simulation decide if it survives. No scripted
+          win state. If your cell starves, it's because the numbers didn't balance, not because
+          the game said so.
+        </p>
+        <div class="cta-row">
+          <!-- TODO: replace with the real Steam store page URL once the Steamworks
+               "coming soon" page is live (steamworks account + $100 Steam Direct fee). -->
+          <a class="btn btn-primary" href="#" id="steam-cta">Wishlist on Steam</a>
+          <a class="btn btn-secondary" href="#how-it-works">See how it works</a>
+        </div>
+        <p class="hero-note">Coming soon. No release date yet — follow along below.</p>
+      </div>
+      <div class="hero-shot">
+        <img src="assets/screenshot-cell.png" alt="A running cell simulation: a mitochondrion wired into a cytoplasm, live quantity readouts, goal checklist, and a time-series chart of ATP and biomass climbing." loading="eager" />
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how">
+      <h2>One engine, any system</h2>
+      <div class="how-grid">
+        <div class="how-card">
+          <h3>Parts &amp; quantities</h3>
+          <p>Every node holds numeric quantities — glucose, population, whatever your system tracks. Every connection can move them.</p>
+        </div>
+        <div class="how-card">
+          <h3>Real rules, not scripts</h3>
+          <p>Diffusion, active transport, formulas — the same small rule set drives a cell's metabolism and a network's supply routes. Nothing is scripted per level.</p>
+        </div>
+        <div class="how-card">
+          <h3>Goals are properties, not triggers</h3>
+          <p>Win conditions are things like "ATP stays above 3 for 10 ticks" or "the network stays a tree" — checked against what's actually happening, every tick.</p>
+        </div>
+        <div class="how-card">
+          <h3>Every level is a text file</h3>
+          <p>No hidden logic. A level is a part list, a starting layout, and a goal — readable, editable, moddable.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenshots" class="screenshots">
+      <h2>Two systems, one engine</h2>
+      <div class="shot-grid">
+        <figure>
+          <img src="assets/screenshot-cell.png" alt="Biological cell builder mid-simulation, with live goal checklist and a chart of quantities over time." loading="lazy" />
+          <figcaption>Biological Cell — wire organelles and membrane transport, keep the numbers alive.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshot-levels.png" alt="Level select screen showing the Biological Cell and Outpost Network system packs." loading="lazy" />
+          <figcaption>Every system ships as its own pack — swap the theme, keep the physics.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="get-it" class="get-it">
+      <h2>Get it</h2>
+      <p>Launching on Steam first. Leave your email and we'll let you know the moment it's live — no spam, one message.</p>
+      <!--
+        TODO: wire this form to a real, no-backend-required capture service before launch
+        (Buttondown, Formspree, Mailchimp embed, etc). Left inert on purpose rather than
+        pretending to collect emails with nowhere for them to go — do not remove this
+        comment until the `action` attribute below points at a real endpoint.
+      -->
+      <form class="email-form" action="#" method="post" onsubmit="return false;">
+        <input type="email" name="email" placeholder="you@example.com" required aria-label="Email address" />
+        <button type="submit" class="btn btn-primary" disabled title="Email capture not wired up yet">Notify me</button>
+      </form>
+      <p class="get-it-alt">Or just <a href="#" id="steam-cta-2">wishlist on Steam</a> once the page is live.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>System Builder is an independent project. Not affiliated with Valve or Steam.</p>
+  </footer>
+</body>
+</html>
