@@ -1,0 +1,44 @@
+{
+  "id": "city-4-deep-recon",
+  "title": "Deep Recon",
+  "library": "city",
+  "description": "A third resource, moving alongside builders and cargo: intel. Get enough of it to the forward outpost to call the area scouted.",
+  "narrative": {
+    "intro": "Command got its wish: a third route type. Builders and cargo aren't the only thing that moves through a network — intelligence does too, and it needs its own dedicated route. Get 6 intel reports to the forward outpost, keep the network a single connected tree, and don't let route budget go to something you don't need this time.",
+    "outro": "Three resource types sharing one network and never interfering with each other — that's the whole point of routes being typed. Intel didn't compete with cargo for capacity because they were never on the same route. Scouts found something else out there worth a look: a site that grows on its own."
+  },
+  "availableParts": [
+    { "partType": "outpost", "limit": 2 },
+    { "partType": "builderRoute", "limit": 2 },
+    { "partType": "scoutRoute", "limit": 3 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 60,
+        "y": 260,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 6, "cargo": 0, "fleet": 0, "intel": 8 }
+      },
+      {
+        "id": "forward",
+        "partType": "outpost",
+        "x": 560,
+        "y": 260,
+        "label": "Forward Outpost",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0, "intel": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "forward", "quantity": "intel", "comparator": "gte", "value": 6, "description": "Deliver at least 6 intel to the Forward Outpost." },
+    { "kind": "graph", "check": "connected", "description": "Every outpost must be reachable." },
+    { "kind": "graph", "check": "acyclic", "description": "No loops: the network must stay a tree." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 200
+}

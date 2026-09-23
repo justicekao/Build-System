@@ -5,7 +5,7 @@
   "description": "Four outposts, a cargo target that has to hold, and no single hub allowed to carry the whole network.",
   "narrative": {
     "intro": "You've got budget for a real network this time: four new outposts. Get the depot's cargo up to target and hold it there — and don't let any one outpost become a single point of failure with more than 3 routes through it.",
-    "outro": "A distributed network with no outpost carrying more than three connections turned out to be more robust than a hub-and-spoke, and it moved plenty of cargo besides."
+    "outro": "A distributed network with no outpost carrying more than three connections turned out to be more robust than a hub-and-spoke, and it moved plenty of cargo besides. Command wants eyes further out next — time to add a third kind of route."
   },
   "availableParts": [
     { "partType": "outpost", "limit": 4 },

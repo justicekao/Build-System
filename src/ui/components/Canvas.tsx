@@ -14,6 +14,7 @@ import "@xyflow/react/dist/style.css";
 import { useSimulationStore } from "../../store/simulationStore";
 import { SystemNode, type SystemNodeData } from "./SystemNode";
 import { ENVIRONMENT_NODE_ID, type PartType } from "../../engine";
+import { playConnect, playPlace } from "../sfx";
 
 const nodeTypes = { systemNode: SystemNode };
 
@@ -52,6 +53,7 @@ function CanvasInner({ selectedEdgeType, onEdgePlaced }: CanvasProps) {
           data: {
             label: n.label ?? part?.name ?? n.partType,
             color: part?.color ?? "#888",
+            group: part?.group,
             locked: !!n.locked,
             quantities: n.quantities,
             library: library!,
@@ -87,7 +89,8 @@ function CanvasInner({ selectedEdgeType, onEdgePlaced }: CanvasProps) {
       const partType = event.dataTransfer.getData("application/x-part-type");
       if (!partType) return;
       const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
-      addNode(partType, position.x, position.y);
+      const created = addNode(partType, position.x, position.y);
+      if (created) playPlace();
     },
     [addNode, screenToFlowPosition],
   );
@@ -106,7 +109,10 @@ function CanvasInner({ selectedEdgeType, onEdgePlaced }: CanvasProps) {
         }
         const created = addEdge(selectedEdgeType, pendingSource, node.id);
         setPendingSource(null);
-        if (created) onEdgePlaced();
+        if (created) {
+          playConnect();
+          onEdgePlaced();
+        }
         return;
       }
       setSelected({ nodes: [node.id], edges: [] });
@@ -160,9 +166,9 @@ function CanvasInner({ selectedEdgeType, onEdgePlaced }: CanvasProps) {
         nodesConnectable={false}
         fitView
       >
-        <Background gap={24} />
+        <Background gap={24} color="#1c2029" size={1.5} />
         <Controls showInteractive={false} />
-        <MiniMap pannable zoomable />
+        <MiniMap pannable zoomable maskColor="rgba(10, 11, 14, 0.75)" style={{ background: "#14161d" }} />
       </ReactFlow>
       {selectedEdgeType && (
         <div className="canvas-hint">

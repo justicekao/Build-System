@@ -1,28 +1,30 @@
 import { useState } from "react";
 import { LevelSelect } from "./ui/LevelSelect";
-import { BuilderView } from "./ui/BuilderView";
+import { BuilderView, type BuilderMode } from "./ui/BuilderView";
+import type { Creation } from "./engine";
 import "./App.css";
 
-interface Selection {
-  systemId: string;
-  levelId: string;
-}
-
 function App() {
-  const [selection, setSelection] = useState<Selection | null>(null);
+  const [mode, setMode] = useState<BuilderMode | null>(null);
 
-  if (!selection) {
-    return <LevelSelect onPick={(systemId, levelId) => setSelection({ systemId, levelId })} />;
+  if (!mode) {
+    return (
+      <LevelSelect
+        onPick={(systemId, levelId) => setMode({ kind: "level", systemId, levelId })}
+        onSandbox={(systemId) => setMode({ kind: "sandbox", systemId })}
+        onImport={(creation: Creation) => setMode({ kind: "creation", creation })}
+      />
+    );
   }
 
-  return (
-    <BuilderView
-      key={`${selection.systemId}/${selection.levelId}`}
-      systemId={selection.systemId}
-      levelId={selection.levelId}
-      onBack={() => setSelection(null)}
-    />
-  );
+  const key =
+    mode.kind === "level"
+      ? `level:${mode.systemId}/${mode.levelId}`
+      : mode.kind === "sandbox"
+        ? `sandbox:${mode.systemId}`
+        : `creation:${mode.creation.libraryId}:${mode.creation.title}`;
+
+  return <BuilderView key={key} mode={mode} onBack={() => setMode(null)} />;
 }
 
 export default App;

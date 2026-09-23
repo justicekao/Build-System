@@ -1,0 +1,57 @@
+{
+  "id": "cell-6-full-system",
+  "title": "Full System",
+  "library": "cell",
+  "description": "Low oxygen, high waste, and a real growth target, all at once. Everything you've built so far, in one cell.",
+  "narrative": {
+    "intro": "No more single-problem tissue samples. This one has thin oxygen and a waste-saturated environment at the same time, and you're still expected to actually grow, not just survive. Nothing here is new — every part you've used before is available — but nothing here is optional either.",
+    "outro": "Respiration efficiency, active waste management, and growth allocation, all running at once and all still balancing. That's not a bigger version of the first cell you built — it's every constraint you've met so far, holding simultaneously."
+  },
+  "environment": {
+    "description": "Thin oxygen, waste-saturated tissue — the hardest environment yet.",
+    "quantities": { "glucose": 11, "oxygen": 3, "waste": 9 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 2 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "peroxisome", "limit": 1 },
+    { "partType": "biosynthesis", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 8 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 },
+    { "partType": "effluxPump", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 11, "oxygen": 3, "waste": 9 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 2, "turns": 10, "description": "Keep cytoplasmic ATP at or above 2 for 10 straight ticks." },
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "biomass", "comparator": "gte", "value": 3, "description": "Accumulate at least 3 units of biomass." },
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "lte", "value": 6, "description": "Keep internal waste at or below 6." }
+  ],
+  "failConditions": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "gte", "value": 16, "description": "Internal waste hit toxic levels — the cell is dead." },
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "eq", "value": 0, "turns": 15, "description": "ATP flatlined at zero for 15 ticks — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 400
+}

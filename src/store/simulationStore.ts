@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import {
+  CREATION_FORMAT_VERSION,
   ENVIRONMENT_NODE_ID,
   evaluateAll,
   step,
+  type Creation,
+  type Criterion,
   type CriterionResult,
   type GraphEdge,
   type GraphNode,
@@ -14,6 +17,12 @@ import {
 import { getLevel, getSystemPack } from "../content/registry";
 
 export type RunStatus = "building" | "running" | "won" | "lost";
+
+const SANDBOX_PREFIX = "sandbox:";
+
+export function isSandboxLevelId(levelId: string | undefined): boolean {
+  return !!levelId?.startsWith(SANDBOX_PREFIX);
+}
 
 interface SimulationState {
   systemId: string | null;
@@ -32,6 +41,12 @@ interface SimulationState {
   nextId: number;
 
   loadLevel: (systemId: string, levelId: string) => void;
+  loadSandbox: (systemId: string) => void;
+  loadCreation: (creation: Creation) => void;
+  exportCreation: () => Creation | null;
+  setCreationMeta: (meta: { title?: string; description?: string }) => void;
+  setGoals: (goals: Criterion[]) => void;
+  setEnvironmentQuantity: (quantity: string, value: number) => void;
   reset: () => void;
   addNode: (partType: string, x: number, y: number) => string | null;
   addEdge: (partType: string, source: string, target: string) => string | null;
@@ -116,9 +131,120 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     });
   },
 
+  loadSandbox: (systemId) => {
+    const pack = getSystemPack(systemId);
+    if (!pack) throw new Error(`Unknown system "${systemId}"`);
+    const level: Level = {
+      id: `${SANDBOX_PREFIX}${systemId}`,
+      title: "Untitled creation",
+      library: systemId,
+      description: "Build anything the library's parts allow, then author your own goals for it.",
+      availableParts: pack.library.partTypes.map((p) => ({ partType: p.id })),
+      initialGraph: { nodes: [], edges: [] },
+      goals: [],
+    };
+    const graph: SystemGraph = { nodes: [], edges: [] };
+    set({
+      ...emptyGraphState(),
+      systemId,
+      level,
+      library: pack.library,
+      environment: {},
+      graph,
+      history: [graph],
+      status: "building",
+    });
+  },
+
+  loadCreation: (creation) => {
+    const pack = getSystemPack(creation.libraryId);
+    if (!pack) throw new Error(`Unknown library "${creation.libraryId}"`);
+    const level: Level = {
+      id: `${SANDBOX_PREFIX}${creation.libraryId}`,
+      title: creation.title,
+      library: creation.libraryId,
+      description: creation.description,
+      availableParts: pack.library.partTypes.map((p) => ({ partType: p.id })),
+      initialGraph: creation.graph,
+      goals: creation.goals,
+    };
+    const graph: SystemGraph = {
+      nodes: creation.graph.nodes.map((n) => ({ ...n, quantities: { ...n.quantities } })),
+      edges: creation.graph.edges.map((e) => ({ ...e })),
+    };
+    const environment = { ...creation.environment };
+    const { goalResults, failResults } = evaluateStatus(level, graph, environment, [graph]);
+    set({
+      ...emptyGraphState(),
+      systemId: creation.libraryId,
+      level,
+      library: pack.library,
+      environment,
+      graph,
+      history: [graph],
+      goalResults,
+      failResults,
+      status: "building",
+    });
+  },
+
+  exportCreation: () => {
+    const { level, graph, environment } = get();
+    if (!level) return null;
+    return {
+      formatVersion: CREATION_FORMAT_VERSION,
+      libraryId: level.library,
+      title: level.title,
+      description: level.description,
+      graph,
+      environment,
+      goals: level.goals,
+    };
+  },
+
+  setCreationMeta: ({ title, description }) => {
+    const { level } = get();
+    if (!level) return;
+    set({
+      level: {
+        ...level,
+        title: title !== undefined ? title : level.title,
+        description: description !== undefined ? description : level.description,
+      },
+    });
+  },
+
+  setGoals: (goals) => {
+    const { level } = get();
+    if (!level) return;
+    set({ level: { ...level, goals } });
+    get().refreshStatus();
+  },
+
+  setEnvironmentQuantity: (quantity, value) => {
+    const { environment } = get();
+    set({ environment: { ...environment, [quantity]: value } });
+    get().refreshStatus();
+  },
+
   reset: () => {
-    const { systemId, level } = get();
-    if (systemId && level) get().loadLevel(systemId, level.id);
+    const { systemId, level, graph, environment } = get();
+    if (!systemId || !level) return;
+    if (isSandboxLevelId(level.id)) {
+      // Rewind the simulation, but keep whatever the player has built —
+      // "reset" in sandbox means "run it again," not "discard my work."
+      const { goalResults, failResults } = evaluateStatus(level, graph, environment, [graph]);
+      set({
+        history: [graph],
+        tick: 0,
+        playing: false,
+        status: "building",
+        goalResults,
+        failResults,
+      });
+    } else {
+      get().loadLevel(systemId, level.id);
+    }
   },
 
   addNode: (partType, x, y) => {

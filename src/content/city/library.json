@@ -4,7 +4,8 @@
   "quantities": [
     { "id": "population", "name": "Builders", "unit": "k", "color": "#4ea8f5" },
     { "id": "cargo", "name": "Cargo", "unit": "t", "color": "#f5b642" },
-    { "id": "fleet", "name": "Escort fleet", "unit": "hulls", "color": "#e05656" }
+    { "id": "fleet", "name": "Escort fleet", "unit": "hulls", "color": "#e05656" },
+    { "id": "intel", "name": "Intel", "unit": "reports", "color": "#5fd6c4" }
   ],
   "partTypes": [
     {
@@ -30,6 +31,16 @@
       "group": "enemy",
       "color": "#b0453f",
       "description": "Hostile territory. You can't remove it — you can only route an escort fleet there and hold it."
+    },
+    {
+      "id": "boomtown",
+      "name": "Boomtown outpost",
+      "category": "node",
+      "group": "friendly",
+      "color": "#f0c96b",
+      "description": "Grows its own population once seeded — starts with 1 founding settler and compounds on its own, no route required to sustain it.",
+      "defaultQuantities": { "population": 1 },
+      "rules": [{ "kind": "formula", "quantity": "population", "expression": "population * 0.06" }]
     },
     {
       "id": "builderRoute",
@@ -80,6 +91,16 @@
       "description": "Moves 1 escort fleet hull per tick from source to target, while the source has any to send.",
       "allowedQuantities": ["fleet"],
       "rules": [{ "kind": "fixedFlow", "quantity": "fleet", "amount": 1 }]
+    },
+    {
+      "id": "scoutRoute",
+      "name": "Scout route",
+      "category": "edge",
+      "group": "route",
+      "color": "#5fd6c4",
+      "description": "Moves 1 intel report per tick from source to target, while the source has any to send.",
+      "allowedQuantities": ["intel"],
+      "rules": [{ "kind": "fixedFlow", "quantity": "intel", "amount": 1 }]
     }
   ]
 }

@@ -1,0 +1,53 @@
+{
+  "id": "cell-5-growth-budget",
+  "title": "Growth Budget",
+  "library": "cell",
+  "description": "One mitochondrion, and now the biosynthesis complex wants a share of the ATP the ribosome already depends on. Grow the cell without starving it.",
+  "narrative": {
+    "intro": "You only get one mitochondrion this time — energy is the scarce resource, not raw materials. The biosynthesis complex builds biomass fast, but it eats glucose and ATP together, the same ATP your ribosome needs just to keep translating. Overinvest in growth and you'll starve the very process that makes growth mean anything.",
+    "outro": "Three organelles pulling from two shared pools is the entire game of cellular resource allocation in miniature. There was no 'more of everything' option — every unit of ATP the biosynthesis complex took was a unit the ribosome didn't get, and the balance had to actually hold, not just look good for one tick."
+  },
+  "environment": {
+    "description": "Adequate but not abundant — enough to grow on, not enough to waste.",
+    "quantities": { "glucose": 8, "oxygen": 8, "waste": 0 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 1 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "biosynthesis", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 6 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 8, "oxygen": 8, "waste": 0 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "biomass", "comparator": "gte", "value": 4, "description": "Accumulate at least 4 units of biomass." },
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 1, "turns": 10, "description": "Keep cytoplasmic ATP at or above 1 for 10 straight ticks — don't let biosynthesis starve the ribosome." }
+  ],
+  "failConditions": [
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "eq", "value": 0, "turns": 15, "description": "ATP flatlined at zero for 15 ticks — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 350
+}

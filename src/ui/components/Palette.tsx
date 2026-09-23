@@ -1,5 +1,6 @@
 import type { PartType } from "../../engine";
 import { useSimulationStore } from "../../store/simulationStore";
+import { PartIcon } from "./icons";
 
 interface PaletteProps {
   selectedEdgeType: string | null;
@@ -30,9 +31,11 @@ function PartRow({
       onClick={disabled ? undefined : onClick}
       title={part.description}
     >
-      <span className="swatch" style={{ background: part.color ?? "#888" }} />
+      <span className="swatch" style={{ color: part.color ?? "#888" }}>
+        <PartIcon group={part.group} />
+      </span>
       <span className="palette-label">{part.name}</span>
-      <span className="palette-budget">{remaining === null ? "∞" : remaining}</span>
+      <span className="palette-budget mono">{remaining === null ? "∞" : remaining}</span>
     </div>
   );
 }

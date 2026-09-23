@@ -52,6 +52,28 @@
       ]
     },
     {
+      "id": "peroxisome",
+      "name": "Peroxisome",
+      "category": "node",
+      "group": "organelle",
+      "color": "#5fa8d6",
+      "description": "Breaks down waste directly, no substrate needed — an organelle slot spent on detox instead of a membrane pump.",
+      "rules": [{ "kind": "sink", "quantity": "waste", "rate": 0.8 }]
+    },
+    {
+      "id": "biosynthesis",
+      "name": "Biosynthesis complex",
+      "category": "node",
+      "group": "organelle",
+      "color": "#d67f9e",
+      "description": "Spends glucose AND ATP together to build biomass directly — a second claim on the same pools the mitochondrion and ribosome already draw from.",
+      "rules": [
+        { "kind": "formula", "quantity": "glucose", "expression": "-min(glucose, atp) * 0.3" },
+        { "kind": "formula", "quantity": "atp", "expression": "-min(glucose, atp) * 0.3" },
+        { "kind": "formula", "quantity": "biomass", "expression": "min(glucose, atp) * 0.5" }
+      ]
+    },
+    {
       "id": "innerMembrane",
       "name": "Organelle membrane",
       "category": "edge",

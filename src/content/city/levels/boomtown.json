@@ -1,0 +1,34 @@
+{
+  "id": "city-5-boomtown",
+  "title": "Boomtown",
+  "library": "city",
+  "description": "Not every outpost needs constant supply. Seed a boomtown and let it grow on its own — but it still needs cargo from somewhere.",
+  "narrative": {
+    "intro": "This outpost site is different: found it with a founding settler already there, and left alone it grows on its own — no builder route required. That doesn't mean it's self-sufficient, though. It still needs cargo shipped in from home base like anything else.",
+    "outro": "Growth and supply turned out to be two separate problems with two separate solutions — one you set up once and walked away from, one you had to keep running. Knowing which is which is most of what running a network actually is."
+  },
+  "availableParts": [
+    { "partType": "boomtown", "limit": 1 },
+    { "partType": "cargoRoute", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 60,
+        "y": 260,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 4, "cargo": 8, "fleet": 0, "intel": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "boomtown-1", "quantity": "population", "comparator": "gte", "value": 8, "description": "Let the boomtown's population grow to at least 8 on its own." },
+    { "kind": "threshold", "node": "boomtown-1", "quantity": "cargo", "comparator": "gte", "value": 4, "description": "Ship it at least 4 cargo." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 220
+}

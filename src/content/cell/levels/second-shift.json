@@ -1,0 +1,54 @@
+{
+  "id": "cell-4-second-shift",
+  "title": "Second Shift",
+  "library": "cell",
+  "description": "Waste is building up both outside the cell and from your own respiration. A passive channel won't help — you need to actively get rid of it, and you get to choose how.",
+  "narrative": {
+    "intro": "Same lab, a rougher patch of tissue this time. Waste concentration outside is high enough that a passive channel would let it flood in as easily as out — and your own mitochondria are adding to the pile from the inside. You've got two ways to deal with it: a peroxisome that destroys waste on-site (costs an organelle slot and a membrane connection), or a pump that ejects it at the membrane (costs only a connection). Pick your trade-off.",
+    "outro": "Two different organelles solved the same problem two different ways — one spent a slot, one spent a connection. Real cells run both strategies simultaneously for exactly this reason: redundancy is cheap insurance when the alternative is dying to your own metabolic byproducts."
+  },
+  "environment": {
+    "description": "Moderately toxic tissue — not enough to be instantly lethal, but enough that doing nothing loses.",
+    "quantities": { "glucose": 9, "oxygen": 8, "waste": 10 }
+  },
+  "availableParts": [
+    { "partType": "mitochondrion", "limit": 2 },
+    { "partType": "ribosome", "limit": 1 },
+    { "partType": "peroxisome", "limit": 1 },
+    { "partType": "innerMembrane", "limit": 5 },
+    { "partType": "glucoseChannel", "limit": 1 },
+    { "partType": "oxygenChannel", "limit": 1 },
+    { "partType": "effluxPump", "limit": 1 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "environment",
+        "partType": "environment",
+        "x": 60,
+        "y": 220,
+        "locked": true,
+        "quantities": { "glucose": 9, "oxygen": 8, "waste": 10 }
+      },
+      {
+        "id": "cytoplasm",
+        "partType": "cytoplasm",
+        "x": 420,
+        "y": 220,
+        "locked": true,
+        "label": "Cytoplasm",
+        "quantities": { "glucose": 0, "oxygen": 0, "atp": 0, "waste": 0, "biomass": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "lte", "value": 5, "description": "Keep internal waste at or below 5." },
+    { "kind": "streak", "node": "cytoplasm", "quantity": "atp", "comparator": "gte", "value": 2, "turns": 8, "description": "Keep cytoplasmic ATP at or above 2 for 8 straight ticks." }
+  ],
+  "failConditions": [
+    { "kind": "threshold", "node": "cytoplasm", "quantity": "waste", "comparator": "gte", "value": 16, "description": "Internal waste hit toxic levels — the cell is dead." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 300
+}

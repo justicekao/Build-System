@@ -1,0 +1,63 @@
+{
+  "id": "city-6-capstone-network",
+  "title": "Capstone Network",
+  "library": "city",
+  "description": "A boomtown, a scouted outpost, a cargo depot, and a hub-limit — everything you've learned, one network.",
+  "narrative": {
+    "intro": "Last network before this sector's fully open: seed a boomtown, get intel on the depot, keep cargo flowing, and don't let any single outpost carry more than 3 routes. Nothing new here — just everything at once.",
+    "outro": "No new mechanic this time, on purpose. Every piece — typed routes, organic growth, sustained thresholds, a degree limit — had already been introduced on its own. The only thing capstone about this one was making them all hold at the same time."
+  },
+  "availableParts": [
+    { "partType": "outpost", "limit": 2 },
+    { "partType": "builderRoute", "limit": 3 },
+    { "partType": "cargoRoute", "limit": 3 },
+    { "partType": "scoutRoute", "limit": 2 }
+  ],
+  "initialGraph": {
+    "nodes": [
+      {
+        "id": "homeBase",
+        "partType": "allyOutpost",
+        "x": 60,
+        "y": 260,
+        "locked": true,
+        "label": "Home Base",
+        "quantities": { "population": 10, "cargo": 10, "fleet": 0, "intel": 8 }
+      },
+      {
+        "id": "depot",
+        "partType": "outpost",
+        "x": 620,
+        "y": 160,
+        "label": "Depot",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0, "intel": 0 }
+      },
+      {
+        "id": "watchpost",
+        "partType": "outpost",
+        "x": 620,
+        "y": 360,
+        "label": "Watchpost",
+        "quantities": { "population": 0, "cargo": 0, "fleet": 0, "intel": 0 }
+      },
+      {
+        "id": "boomtown",
+        "partType": "boomtown",
+        "x": 340,
+        "y": 460,
+        "label": "Boomtown",
+        "quantities": { "population": 1, "cargo": 0, "fleet": 0, "intel": 0 }
+      }
+    ],
+    "edges": []
+  },
+  "goals": [
+    { "kind": "threshold", "node": "boomtown", "quantity": "population", "comparator": "gte", "value": 6, "description": "Let the boomtown grow to at least 6 population." },
+    { "kind": "streak", "node": "depot", "quantity": "cargo", "comparator": "gte", "value": 5, "turns": 6, "description": "Hold the Depot's cargo at or above 5 for 6 straight ticks." },
+    { "kind": "threshold", "node": "watchpost", "quantity": "intel", "comparator": "gte", "value": 5, "description": "Deliver at least 5 intel to the Watchpost." },
+    { "kind": "graph", "check": "connected", "description": "Every outpost must be reachable." },
+    { "kind": "graph", "check": "maxDegree", "value": 3, "description": "No outpost may have more than 3 routes connected to it." }
+  ],
+  "tickRate": 4,
+  "maxTicks": 350
+}

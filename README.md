@@ -51,6 +51,34 @@ Every tick is a plain forward-Euler step (`src/engine/simulate.ts`): compute
 every rule's delta from a frozen snapshot of the current state, then apply
 them all at once, so rule order never matters and the result is deterministic.
 
+## Sandbox mode: build and share your own model
+
+Every content pack gets a "Sandbox" card on the level-select screen, next to
+its real levels. It's a blank canvas with every part in that library
+available and no budget limit — the same builder UI, engine, and simulation
+loop as a real level, just without a pre-authored puzzle. From there you can:
+
+- Build whatever graph you want.
+- Set the environment's fixed reservoir values, if the library uses one.
+- Author your own goals through a small form (threshold / sustained streak /
+  graph-shape criteria) — the same `Criterion` types real levels use.
+- **Export** the result as a downloadable JSON file (a "creation"), and
+  **Import** one someone sent you from the level-select screen.
+
+There's no backend and no accounts — sharing a creation today means sending
+the exported `.json` file directly (Discord, email, a forum post), the same
+way you'd share a save file. `src/engine/creation.ts` defines the format and
+validates an imported file against the importer's own copy of the target
+library before it's allowed to load (unknown parts, malformed nodes/edges,
+and format-version mismatches are all rejected with a specific error, not a
+silent failure). An imported creation opens back up in the same sandbox
+editor, so importing and then remixing someone else's model is the same
+action as building your own.
+
+This is also the shape a real creator-marketplace pipeline would build on
+top of later: the export format is already the unit you'd upload, and the
+import validation is already most of what a submission review step needs.
+
 ## Adding a brand-new system
 
 You don't need to touch any code. Drop two things under `src/content/`:
@@ -83,18 +111,23 @@ edit, no rebuild logic to touch.
 ## What's included
 
 - `src/engine/` — the domain-agnostic simulation engine (expression
-  evaluator, tick function, graph analysis, criteria evaluator), with unit
-  tests in `src/engine/__tests__/`.
-- `src/content/cell/` — a biological-cell content pack: organelles,
-  membrane channels vs. active transporters, three levels (nutrient-rich,
-  oxygen-limited, and a toxic-efflux scenario requiring active pumping
-  against the gradient).
-- `src/content/city/` — an outpost-network content pack: builders/cargo/
-  fleet flowing over routes, three levels exercising graph constraints
-  (acyclic, non-crossing, max degree) and dynamical constraints (sustained
-  thresholds, exact per-tick growth).
+  evaluator, tick function, graph analysis, criteria evaluator, creation
+  serialization), with unit tests in `src/engine/__tests__/`.
+- `src/content/cell/` — a biological-cell content pack: organelles, membrane
+  channels vs. active transporters, six levels escalating from a plain
+  nutrient-rich cell through oxygen limitation, active waste efflux vs.
+  on-site detox, glucose/ATP allocation between competing organelles, and a
+  capstone combining all of it.
+- `src/content/city/` — an outpost-network content pack: six levels
+  escalating from basic tree/connectivity constraints through planarity, a
+  third (intel) resource type, self-sustaining organic growth, and a
+  capstone network combining graph-shape and sustained-threshold goals.
 - `src/store/simulationStore.ts` — the zustand store driving one level's
-  live graph, tick history, and goal/fail status.
+  live graph, tick history, and goal/fail status, plus the sandbox-specific
+  actions (`loadSandbox`, `loadCreation`, `exportCreation`, `setGoals`, …).
 - `src/ui/` — the React Flow canvas (drag parts from the palette, click two
   nodes with a connection tool selected to link them), goal/fail panel,
-  recharts time-series per node, and intro/outro narrative modals.
+  recharts time-series per node, intro/outro narrative modals, per-part-type
+  icon set (`src/ui/components/icons.tsx`), synthesized SFX with a mute
+  toggle (`src/ui/sfx.ts`, no audio asset files), and the sandbox
+  build/author/export UI (`src/ui/components/SandboxPanel.tsx`).

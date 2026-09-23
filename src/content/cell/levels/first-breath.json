@@ -5,7 +5,7 @@
   "description": "A plain, glucose- and oxygen-rich environment. Build a cell that can actually stay alive in it.",
   "narrative": {
     "intro": "You are given a bare cytoplasm and a generous environment: plenty of glucose, plenty of oxygen. Nothing here is trying to kill you. The only question is whether you can wire up a cell that keeps its ATP above zero and actually builds biomass, rather than just sitting there.",
-    "outro": "The cell holds a stable ATP surplus and is laying down biomass. It isn't evolving or adapting — you built a system that happens to balance, and it survives because the numbers balance, not because it 'wanted' to."
+    "outro": "The cell holds a stable ATP surplus and is laying down biomass. It isn't evolving or adapting — you built a system that happens to balance, and it survives because the numbers balance, not because it 'wanted' to. The lab's next samples won't be this forgiving."
   },
   "environment": {
     "description": "Open, nutrient-rich extracellular fluid.",

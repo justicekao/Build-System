@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useSimulationStore } from "../../store/simulationStore";
+import { isMuted, setMuted } from "../sfx";
 
 export function SimControls() {
   const playing = useSimulationStore((s) => s.playing);
@@ -10,6 +12,7 @@ export function SimControls() {
   const setSpeed = useSimulationStore((s) => s.setSpeed);
   const tickOnce = useSimulationStore((s) => s.tickOnce);
   const reset = useSimulationStore((s) => s.reset);
+  const [muted, setMutedState] = useState(isMuted);
 
   const ended = status === "won" || status === "lost";
 
@@ -31,11 +34,23 @@ export function SimControls() {
           value={speed}
           onChange={(e) => setSpeed(Number(e.target.value))}
         />
-        <span>{speed}x</span>
+        <span className="mono">{speed}x</span>
       </label>
-      <span className="tick-counter">tick {tick}</span>
+      <span className="tick-counter mono">tick {tick}</span>
       <button type="button" className="reset-button" onClick={reset}>
         Reset level
+      </button>
+      <button
+        type="button"
+        className="mute-toggle"
+        onClick={() => {
+          const next = !muted;
+          setMuted(next);
+          setMutedState(next);
+        }}
+        title={muted ? "Unmute sound" : "Mute sound"}
+      >
+        {muted ? "\u{1F507}" : "\u{1F50A}"}
       </button>
     </div>
   );
